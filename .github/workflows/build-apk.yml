@@ -33,10 +33,13 @@ jobs:
           echo "<h1>Application Successfully Launched</h1><p>Compiled natively via GitHub Actions.</p>" > app_source/index.html
         fi
 
-    - name: Download and Run Standalone App Compiler
+    - name: Download Standalone App Compiler
       run: |
-        wget https://github.com
+        wget -O web-to-app-linux https://github.com
         chmod +x web-to-app-linux
+
+    - name: Run Standalone App Compiler
+      run: |
         ./web-to-app-linux --input ./app_source --output ./final-app.apk --name "My GitHub App"
 
     - name: Distribute APK to GitHub Releases
