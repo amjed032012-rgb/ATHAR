@@ -2,12 +2,12 @@ name: Build and Release APK
 
 on:
   push:
-    branches: [ main, master ] # Triggers automatically when you commit
-  workflow_dispatch: # Allows you to click a button to build manually
+    branches: [ main, master ] 
+  workflow_dispatch: 
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # Locked to stable version
 
     steps:
     - name: Checkout Code
@@ -16,7 +16,7 @@ jobs:
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        distribution: 'zulu'
+        distribution: 'temurin'
         java-version: '17'
 
     - name: Make Gradle Executable
