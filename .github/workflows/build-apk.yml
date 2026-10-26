@@ -16,17 +16,29 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v5
 
-    - name: Convert Project to APK
-      uses: Jipok/website-to-apk@v2
+    # If your repository is empty or missing web files, this creates a default placeholder page so the compiler doesn't fail
+    - name: Ensure Web Files Exist
+      run: |
+        if [ ! -d "www" ] && [ ! -d "build" ] && [ ! -f "index.html" ]; then
+          mkdir -p www
+          echo "<h1>Welcome to my GitHub App</h1><p>Compiled successfully via GitHub Actions.</p>" > www/index.html
+        fi
+
+    - name: Convert Web Assets to APK
+      uses: Hrishikesh-K/web-to-app-action@v1
       with:
+        build-folder-path: ${{ (dynamic_dir) }}
         app-name: "My GitHub App"
-        package-name: "com.mygithubapp.app"
-        output-apk-path: "my-compiled-app.apk"
+        output-folder-path: "apk-output/"
+
+    - name: Rename compiled APK
+      run: |
+        mv apk-output/debug.apk final-app.apk
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: my-compiled-app.apk
+        files: final-app.apk
         tag_name: v1.0.${{ github.run_number }}
         name: Release v1.0.${{ github.run_number }}
         draft: false
