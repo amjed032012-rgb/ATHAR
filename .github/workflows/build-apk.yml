@@ -16,22 +16,28 @@ jobs:
     - name: Checkout Code Repository
       uses: actions/checkout@v5
 
-    - name: Initialize Web Directory Builder
+    - name: Setup Java Development Kit
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Prepare Application Files
       run: |
-        if [ ! -d "www" ] && [ ! -f "index.html" ]; then
-          mkdir -p www
-          echo "<h1>Application Successfully Launched</h1><p>Compiled natively via GitHub Actions.</p>" > www/index.html
+        mkdir -p app_source
+        if [ -f "index.html" ]; then
+          cp -r * app_source/ 2>/dev/null || true
+        elif [ -d "www" ]; then
+          cp -r www/* app_source/
+        else
+          echo "<h1>Application Successfully Launched</h1><p>Compiled natively via GitHub Actions.</p>" > app_source/index.html
         fi
 
-    - name: Build Android App Container
-      uses: duckduckfire/delegateapp-action@v1
-      with:
-        app-name: "My GitHub App"
-        web-dir: ${{ (dynamic_dir) }}
-
-    - name: Stage Production Package
+    - name: Download and Run Standalone App Compiler
       run: |
-        mv release.apk final-app.apk
+        wget https://github.com
+        chmod +x web-to-app-linux
+        ./web-to-app-linux --input ./app_source --output ./final-app.apk --name "My GitHub App"
 
     - name: Distribute APK to GitHub Releases
       uses: softprops/action-gh-release@v2
