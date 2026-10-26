@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix أثر | مساجد العباد",
+  "description": "رحلة تفاعلية في ذاكرة مساجد العباد ونفائس العمارة العُمانية — مسابقة سراج عُمان",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
